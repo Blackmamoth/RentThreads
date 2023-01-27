@@ -11,6 +11,7 @@ const addClothSchema = joi.object({
 const getClothesSchema = joi.object({
   storeName: joi.string().trim().allow(null),
   rentPerHour: joi.string().trim().allow(null),
+  stock: joi.number().allow(null),
 });
 
 const updateClothSchema = joi.object({
