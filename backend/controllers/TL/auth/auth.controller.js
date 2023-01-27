@@ -1,4 +1,4 @@
-const authValidation = require("../../helpers/joi_validation/auth/tl/ThreadLord.validation_schema");
+const authValidation = require("../../../helpers/joi_validation/tl/auth/threadLord.validation_schema");
 const asyncHandler = require("express-async-handler");
 const httpErrors = require("http-errors");
 const bcrypt = require("bcryptjs");
@@ -8,9 +8,9 @@ const jwt = require("jsonwebtoken");
 const {
   generateAccessToken,
   generateRefreshToken,
-} = require("../../helpers/helper_functions/tlAuthFunction");
-const ThreadLord = require("../../models/tlauth/ThreadLord.model");
-const RefreshToken = require("../../models/tlauth/RefreshToken");
+} = require("../../../helpers/helper_functions/tlAuthFunction");
+const ThreadLord = require("../../../models/TL/tlauth/ThreadLord.model");
+const RefreshToken = require("../../../models/TL/tlauth/RefreshToken");
 
 const registerThreadLord = asyncHandler(async (req, res) => {
   try {
@@ -32,6 +32,7 @@ const registerThreadLord = asyncHandler(async (req, res) => {
           email: threadLord.email,
           storeName: threadLord.storeName,
         },
+        message: "You are successfully registered",
       },
     });
   } catch (error) {
@@ -82,6 +83,7 @@ const loginThreadLord = asyncHandler(async (req, res) => {
               storeName: threadLord.storeName,
             },
           },
+          message: "Logged In successfully",
         });
     }
   } catch (error) {

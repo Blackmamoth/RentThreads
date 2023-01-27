@@ -13,6 +13,7 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/tl/auth", require("./routes/tlAuth/tlAuth.route"));
+app.use("/tl/auth", require("./routes/TL/tlAuth/tlAuth.route"));
+app.use("/tl/clothes", require("./routes/TL/crud/tlInventory"));
 
 app.listen(PORT, () => console.log(`Application running on port ${PORT}`));

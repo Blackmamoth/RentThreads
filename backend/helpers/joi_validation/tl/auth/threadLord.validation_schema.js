@@ -1,7 +1,7 @@
 const joi = require("joi");
 const { joiPasswordExtendCore } = require("joi-password");
 const joiPassword = joi.extend(joiPasswordExtendCore);
-joi.objectId = require("joi-objectid");
+joi.objectId = require("joi-objectid")(joi);
 
 const tlRegisterSchema = joi.object({
   username: joi.string().trim().required(),

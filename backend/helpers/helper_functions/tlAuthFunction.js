@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const moment = require("moment");
-const RefreshToken = require("../../models/tlauth/RefreshToken");
+const RefreshToken = require("../../models/TL/tlauth/RefreshToken");
 
 const generateAccessToken = (threadLord) => {
   return jwt.sign(
