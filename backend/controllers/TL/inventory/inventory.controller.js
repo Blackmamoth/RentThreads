@@ -8,7 +8,11 @@ const addCloth = asyncHandler(async (req, res) => {
     const clothDetails = await inventoryValidation.addClothSchema.validateAsync(
       req.body
     );
-    const cloth = await Inventory.create(clothDetails);
+    const cloth = await Inventory.create({
+      ...clothDetails,
+      threadLordId: req.tl._id,
+      storeName: req.tl.storeName,
+    });
     res.status(201).send({
       error: false,
       data: {
@@ -33,7 +37,10 @@ const getClothes = asyncHandler(async (req, res) => {
   try {
     const clothFilters =
       await inventoryValidation.getClothesSchema.validateAsync(req.body);
-    const clothes = await Inventory.find(clothFilters);
+    const clothes = await Inventory.find({
+      ...clothFilters,
+      threadLordId: req.tl._id,
+    });
     res.status(200).send({
       error: false,
       data: {
@@ -62,7 +69,13 @@ const updateClothes = asyncHandler(async (req, res) => {
       res.status(404);
       throw httpErrors.NotFound("The item you are looking for cannot be found");
     }
-    const updatedItem = await clothes.updateOne(clothDetails, { new: true });
+    if (!clothes.threadLordId.equals(req.tl._id)) {
+      res.status(403);
+      throw httpErrors.Forbidden(
+        "You are not allowed to make changes in this inventory"
+      );
+    }
+    await clothes.updateOne(clothDetails, { new: true });
     const cloth = await Inventory.findById(clothDetails.clothId);
     res.status(200).send({
       error: false,
@@ -92,6 +105,12 @@ const deleteCloth = asyncHandler(async (req, res) => {
     if (!cloth) {
       res.status(404);
       throw httpErrors.NotFound("The item you are looking for cannot be found");
+    }
+    if (!cloth.threadLordId.equals(req.tl._id)) {
+      res.status(403);
+      throw httpErrors.Forbidden(
+        "You are not allowed to make changes in this inventory"
+      );
     }
     await cloth.delete();
     res.status(200).send({
