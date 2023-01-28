@@ -2,7 +2,7 @@ const joi = require("joi");
 joi.objectId = require("joi-objectid")(joi);
 
 const addClothSchema = joi.object({
-  name: joi.string().trim().required(),
+  title: joi.string().trim().required(),
   rentPerHour: joi.number().min(100).max(10000).required(),
   stock: joi.number().min(1).required(),
   image: joi.string().trim().uri().required(),
@@ -15,9 +15,10 @@ const getClothesSchema = joi.object({
 
 const updateClothSchema = joi.object({
   clothId: joi.objectId().required(),
-  name: joi.string().trim(),
+  title: joi.string().trim(),
   rentPerHour: joi.number(),
-  image: joi.string().trim().uri().required(),
+  stock: joi.number(),
+  image: joi.string().trim().uri(),
 });
 
 const deleteClothSchema = joi.object({

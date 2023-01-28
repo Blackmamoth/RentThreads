@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
 const Inventory = new mongoose.Schema({
-  name: {
+  title: {
     type: String,
-    required: [true, "Name required"],
+    required: [true, "Title required"],
   },
   rentPerHour: {
     type: Number,
