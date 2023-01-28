@@ -5,7 +5,7 @@ const Inventory = new mongoose.Schema({
     type: String,
     required: [true, "Title required"],
   },
-  rentPerHour: {
+  rentPerDay: {
     type: Number,
     required: [true, "Rent Per Hour required"],
   },
@@ -24,6 +24,7 @@ const Inventory = new mongoose.Schema({
   threadLordId: {
     type: mongoose.SchemaTypes.ObjectId,
     required: [true, "Thread Lord required"],
+    ref: "threadLord",
   },
 });
 
