@@ -28,11 +28,10 @@ const rentCloth = asyncHandler(async (req, res) => {
     const threadLord = await ThreadLord.findById(cloth.threadLordId);
     await cloth.updateOne({ stock: cloth.stock - 1 });
     await rent.populate({ path: "cloth", select: "-threadLordId" });
-    sendMail(
-      threadLord.email,
-      "You got a new RENTER",
-      `${req.renter.username} Rented an item of your's: ${cloth.title}`
-    );
+    const message = `${req.renter.username} Rented an item of yours: ${
+      cloth.title
+    }\nStock left: ${cloth.stock - 1}`;
+    sendMail(threadLord.email, "You got a RENTER", message);
     res.status(201).send({
       error: false,
       rentDetails: rent,
@@ -75,7 +74,37 @@ const getClothes = asyncHandler(async (req, res) => {
   }
 });
 
+const getRentedClothes = asyncHandler(async (req, res) => {
+  try {
+    const clothFilters = await rentValidation.getClothesSchema.validateAsync(
+      req.body
+    );
+    const clothes = await RentedCloth.find({
+      ...clothFilters,
+      renterId: req.renter._id,
+    }).populate("cloth");
+
+    res.status(200).send({
+      error: false,
+      data: {
+        clothDetails: clothes,
+      },
+    });
+  } catch (error) {
+    if (error?.isJoi) {
+      res.status(422);
+    }
+    res.send({
+      error: true,
+      data: {
+        message: error.message,
+      },
+    });
+  }
+});
+
 module.exports = {
   rentCloth,
   getClothes,
+  getRentedClothes,
 };

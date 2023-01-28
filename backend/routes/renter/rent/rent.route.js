@@ -8,5 +8,10 @@ router.post(
   rentController.rentCloth
 );
 router.post("/get-clothes", rentController.getClothes);
+router.get(
+  "/get-rented-clothes",
+  authMiddleware.renterProtectedRoute,
+  rentController.getRentedClothes
+);
 
 module.exports = router;
