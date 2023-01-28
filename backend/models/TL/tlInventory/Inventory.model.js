@@ -17,8 +17,13 @@ const Inventory = new mongoose.Schema({
     type: String,
     required: [true, "Image is required"],
   },
-  threadLordId: {
+  storeName: {
     type: String,
+    required: [true, "Store name is required"],
+  },
+  threadLordId: {
+    type: mongoose.SchemaTypes.ObjectId,
+    required: [true, "Thread Lord required"],
   },
 });
 
