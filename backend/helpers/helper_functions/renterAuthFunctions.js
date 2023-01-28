@@ -1,29 +1,30 @@
 const jwt = require("jsonwebtoken");
-const RefreshToken = require("../../models/TL/tlauth/RefreshToken");
+const RefreshToken = require("../../models/Renter/auth/RefreshToken");
 const httpErrors = require("http-errors");
 
-const generateAccessToken = (threadLord) => {
+const generateAccessToken = (renter) => {
   return jwt.sign(
-    { threadLordId: threadLord._id },
-    process.env.TL_ACCESS_TOKEN_SECRET,
+    { renterId: renter._id },
+    process.env.RENTER_ACCESS_TOKEN_SECRET,
     {
       expiresIn: 1800,
     }
   );
 };
 
-const generateRefreshToken = async (threadLord) => {
+const generateRefreshToken = async (renter) => {
   const token = jwt.sign(
-    { threadLordId: threadLord._id },
-    process.env.TL_REFRESH_TOKEN_SECRET,
+    { renterId: renter._id },
+    process.env.RENTER_REFRESH_TOKEN_SECRET,
     {
       expiresIn: "1d",
     }
   );
   await RefreshToken.create({
-    threadLordId: threadLord._id,
+    renterId: renter._id,
     refreshToken: token,
   }).catch((error) => {
+    console.log(error.message);
     throw httpErrors.InternalServerError(
       "An error occured while saving refresh token to MongoDB Server"
     );
