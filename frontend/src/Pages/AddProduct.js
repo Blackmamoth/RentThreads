@@ -48,7 +48,7 @@ const AddProduct = () => {
       
       const addItem = async () => {
         await axios.post("http://localhost:5000/tl/clothes/add-cloth", {title, rentPerDay, image, stock}).then(response => { 
-          console.log(response)
+          
           if(!response.data.error) {
             showSuccessToast(response.data.data.message);
             addProduct({title, rentPerDay, image, stock});

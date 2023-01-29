@@ -43,13 +43,15 @@ function App() {
 
   const [data, setData] = useState([]);
 
+  const [cartTotal, setCartTotal] = useState(0);
+
   const getClothes = async () => {
     await axios
       .post("http://localhost:5000/renter/clothes/get-clothes")
       .then((res) => {
         setData(res.data.data.clothDetails);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => toast.error(err));
   };
 
   const getSellerInventory = async () => {
@@ -58,7 +60,7 @@ function App() {
       .then((res) => {
         setSellerProduct(res.data.data.clothes);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => toast.error(err));
   };
 
   const [cart, setCart] = useState([]);
@@ -70,6 +72,13 @@ function App() {
 
   function rentProduct(product) {
     setData(data.filter((item) => item.img !== product.img));
+    let cartItems = JSON.parse(localStorage.getItem("cartItems"));
+    if(cartItems === null) {
+      localStorage.setItem("cartItems", JSON.stringify([product]));
+    }else {
+      // cartItems = JSON.parse(cartItems) 
+      localStorage.setItem("cartItems", JSON.stringify([...cartItems, product]));
+    }
     setCart([...cart, product]);
     notify();
   }
@@ -80,7 +89,12 @@ function App() {
 
   function removeProduct(img) {
     setCart(cart.filter((item) => item.img !== img));
+    let cartItems = JSON.parse(localStorage.getItem("cartItems"));
+    cartItems = cartItems.filter((item) => item.img !== img);
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    overAllTotal()
     removeToast();
+
   }
 
   function search(name) {
@@ -102,6 +116,14 @@ function App() {
 
   const removeToast = (message = null) => toast.error(message || "Removed");
 
+  const overAllTotal = () => {
+    const cart = JSON.parse(localStorage.getItem("cartItems"));
+   let total = cart.reduce((acc, item) => {
+      return acc + item.price * item.day;
+    }, 0);
+    setCartTotal(total);
+  }
+
   return (
     <ProductContext.Provider
       value={{
@@ -113,6 +135,8 @@ function App() {
         data,
         search,
         deleteSellerProduct,
+        cartTotal,
+        overAllTotal
       }}
     >
       <BrowserRouter>

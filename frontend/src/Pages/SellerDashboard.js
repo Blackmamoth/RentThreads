@@ -79,10 +79,10 @@ const SellerDashboard = () => {
 
                         <div className="lg:col-span-3">
                             <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                              { sellerProduct.map((product, index) => {
+                              {sellerProduct ? sellerProduct.map((product, index) => {
                                         const {title, image, rentPerDay} = product
                                         return <SellerProductCard key={index} title={title} img={image} price={rentPerDay} />
-                                    }) 
+                                    }) : <h1>No Product Found</h1>
                                     
                                     
                               }

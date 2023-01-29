@@ -3,13 +3,17 @@ import {ProductContext} from '../App'
 
 const CartCard = ({name, img, price, day}) => {
 
-  const {removeProduct, cart} = useContext(ProductContext);
+  const {removeProduct, cart, overAllTotal} = useContext(ProductContext);
   const [days, setDays] = useState(day)
 
   useEffect(()=>{
     cart.map((item)=>{
       if(item.img === img){
-        item.day = days
+        if(days === ""){
+          item.day = 1
+
+        }
+        item.day = Number(days)
         
       }
     })
@@ -44,7 +48,13 @@ const CartCard = ({name, img, price, day}) => {
                 <input
                   type="number"
                   min="1"
-                  onChange={(e) => setDays(e.target.value)}
+                  onChange={(e) => {setDays(e.target.value)
+                    let cartItems = JSON.parse(localStorage.getItem("cartItems"));
+                    const index = cartItems.findIndex((item) => item.img === img);
+                    cartItems[index].day = e.target.value;
+                    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+                    overAllTotal()
+                  }}
                   value={days}
                   id="Line3Qty"
                   className="h-8 w-12 rounded border-gray-200 bg-gray-50 p-0 text-center text-xs text-gray-600 [-moz-appearance:_textfield] focus:outline-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none"

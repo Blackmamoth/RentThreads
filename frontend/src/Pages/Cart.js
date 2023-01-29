@@ -1,14 +1,16 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import CartCard from "../Components/CartCard";
 import { ProductContext } from "../App";
 
 const Cart = () => {
-  const { cart } = useContext(ProductContext);
+  const { cartTotal, overAllTotal } = useContext(ProductContext);
 
-  const total = cart.reduce((acc, item) => {
-    return acc + item.price * item.day;
-  }, 0);
+  const cart = JSON.parse(localStorage.getItem("cartItems"));
+
+ useEffect(() => { 
+  overAllTotal()
+ }, []);
 
   return (
     <div>
@@ -42,7 +44,7 @@ const Cart = () => {
                   <dl className="space-y-0.5 text-sm text-gray-700">
                     <div className="flex justify-between !text-base font-medium">
                       <dt>Total</dt>
-                      <dd>₹{total}</dd>
+                      <dd>₹{cartTotal}</dd>
                     </div>
                   </dl>
 

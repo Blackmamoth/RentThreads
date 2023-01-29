@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import CartCard from "../Components/CartCard";
 import { ProductContext } from "../App";
 import { toast } from "react-toastify";
@@ -6,7 +6,14 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Checkout = () => {
-  const { cart } = useContext(ProductContext);
+
+  const { cartTotal, overAllTotal } = useContext(ProductContext);
+
+  useEffect(() => {
+    overAllTotal(); 
+  })
+
+  const cart = JSON.parse(localStorage.getItem("cartItems"));
   const total = cart.reduce((acc, item) => {
     return acc + item.price;
   }, 0);
@@ -34,7 +41,6 @@ const Checkout = () => {
       .post("http://localhost:5000/renter/clothes/rent", { clothDetails })
       .then((res) => {
         if (!res.data.error) {
-          console.log(res);
           toast.success(
             "You successfully rented these clothes, please check your email for further information"
           );
@@ -58,7 +64,7 @@ const Checkout = () => {
 
               <div>
                 <p className="text-2xl font-medium tracking-tight text-gray-900">
-                  ₹{total}
+                  ₹{cartTotal} 
                 </p>
 
                 <p className="mt-1 text-sm text-gray-600">
@@ -70,13 +76,14 @@ const Checkout = () => {
                 <div className="flow-root">
                   <ul className="-my-4 divide-y divide-gray-100">
                     {cart.map((item, index) => {
-                      const { name, img, price } = item;
+                      const { name, img, price, day } = item;
                       return (
                         <CartCard
                           key={index}
                           name={name}
                           img={img}
                           price={price}
+                          day = {day}
                         />
                       );
                     })}
