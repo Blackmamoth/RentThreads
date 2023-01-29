@@ -1,6 +1,6 @@
 # StyleLease
 
-## Link to our Video :
+## Link to our Video : https://www.youtube.com/watch?v=G11GXulLJWY&t=17s
 
 ## Inspiration
 StyleLease is a ecommerce renting website the idea behind developing this application was about the growing trend of subscription-based models and the need for sustainable consumption in the retail industry.
