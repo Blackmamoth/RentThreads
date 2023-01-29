@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Cart from "./Pages/Cart";
 import Checkout from "./Pages/Checkout";
 import Home from "./Pages/Home";
-import { Route, Routes, BrowserRouter, useNavigate } from "react-router-dom";
+import { Route, Routes, BrowserRouter } from "react-router-dom";
 import SharedLayout from "./Pages/SharedLayout";
 import SellerDashboard from "./Pages/SellerDashboard";
 import AddProduct from "./Pages/AddProduct";
@@ -69,12 +69,9 @@ function App() {
   }
 
   function rentProduct(product) {
-    setData(data.filter((item) => item.img != product.img));
+    setData(data.filter((item) => item.img !== product.img));
     setCart([...cart, product]);
-    console.log(product);
-    console.log(data);
     notify();
-    console.log(cart);
   }
 
   function addProduct(product) {
@@ -115,7 +112,7 @@ function App() {
         removeProduct,
         data,
         search,
-        deleteSellerProduct
+        deleteSellerProduct,
       }}
     >
       <BrowserRouter>

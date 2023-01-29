@@ -83,8 +83,8 @@ const loginRenter = asyncHandler(async (req, res) => {
               username: renter.username,
               email: renter.email,
             },
+            message: "Logged In successfully",
           },
-          message: "Logged In successfully",
         });
     }
   } catch (error) {

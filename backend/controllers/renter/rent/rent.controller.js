@@ -27,7 +27,6 @@ const rentCloth = asyncHandler(async (req, res) => {
     await clothes.forEach((cloth) =>
       cloth.updateOne({ stock: cloth.stock - 1 })
     );
-    // await rent.populate({ path: "cloth", select: "-threadLordId" });
 
     threadLord.forEach((lord, index) => {
       const message = `${req.renter.username} Rented an item of yours: ${
@@ -41,6 +40,7 @@ const rentCloth = asyncHandler(async (req, res) => {
       clothes,
     });
   } catch (error) {
+    console.log(error);
     if (error?.isJoi) {
       res.status(422);
     }
