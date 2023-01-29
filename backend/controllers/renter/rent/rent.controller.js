@@ -8,33 +8,37 @@ const { sendMail } = require("../../../helpers/helper_functions/mail.helper");
 
 const rentCloth = asyncHandler(async (req, res) => {
   try {
-    const rentDetails = await rentValidation.rentClothSchema.validateAsync(
+    let rentDetails = await rentValidation.rentClothSchema.validateAsync(
       req.body
     );
-    const cloth = await Inventory.findById(rentDetails.clothId);
-    if (!cloth) {
-      res.status(404);
-      throw httpErrors.NotFound("Item not found");
-    }
-    if (cloth.stock < 1) {
-      res.status(409);
-      throw httpErrors.Conflict("Item out of stock, please try again later");
-    }
-    const rent = await RentedCloth.create({
-      ...rentDetails,
-      cloth: rentDetails.clothId,
-      renterId: req.renter._id,
+    rentDetails = rentDetails.clothDetails.map((detail) => {
+      return {
+        cloth: detail.clothId,
+        rentPeriod: detail.rentPeriod,
+        rentCharge: detail.rentCharge,
+        renterId: req.renter._id,
+      };
     });
-    const threadLord = await ThreadLord.findById(cloth.threadLordId);
-    await cloth.updateOne({ stock: cloth.stock - 1 });
-    await rent.populate({ path: "cloth", select: "-threadLordId" });
-    const message = `${req.renter.username} Rented an item of yours: ${
-      cloth.title
-    }\nStock left: ${cloth.stock - 1}`;
-    sendMail(threadLord.email, "You got a RENTER", message);
+    const clothIds = rentDetails.map((detail) => detail.cloth);
+    const rent = await RentedCloth.insertMany(rentDetails);
+    const clothes = await Inventory.find({ _id: { $in: clothIds } });
+    const threadLordIds = clothes.map((cloth) => cloth.threadLordId);
+    const threadLord = await ThreadLord.find({ _id: { $in: threadLordIds } });
+    await clothes.forEach((cloth) =>
+      cloth.updateOne({ stock: cloth.stock - 1 })
+    );
+    // await rent.populate({ path: "cloth", select: "-threadLordId" });
+
+    threadLord.forEach((lord, index) => {
+      const message = `${req.renter.username} Rented an item of yours: ${
+        clothes[index].title
+      }\nStock left: ${clothes[index].stock - 1}`;
+      sendMail(lord.email, "You got a RENTER", message);
+    });
     res.status(201).send({
       error: false,
       rentDetails: rent,
+      clothes,
     });
   } catch (error) {
     if (error?.isJoi) {
