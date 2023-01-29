@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import CartCard from '../Components/CartCard'
 import { ProductContext } from '../App'
@@ -7,7 +7,10 @@ const Cart = () => {
 
   const { cart } = useContext(ProductContext)
 
-  const total = cart.reduce((acc, item) => { return acc + item.price }, 0)
+  const total = cart.reduce((acc, item) => { return acc + item.price * item.day }, 0)
+  console.log(total)
+
+  
 
   return (
     <div>
@@ -24,8 +27,8 @@ const Cart = () => {
      
      {
       cart.map((item, index)=>{
-        const {name, img, price} = item
-        return <CartCard key={index} name={name} img={img} price={price}  />
+        const {name, img, price, day} = item
+        return <CartCard key={index} name={name} img={img} price={price} day={day}  />
       })
      }
 

@@ -1,10 +1,19 @@
-import React, {useState, useContext} from 'react'
+import React, {useState, useContext, useEffect} from 'react'
 import {ProductContext} from '../App'
 
-const CartCard = ({name, img, price}) => {
+const CartCard = ({name, img, price, day}) => {
 
-  const {removeProduct} = useContext(ProductContext);
-  const [days, setDays] = useState(1)
+  const {removeProduct, cart} = useContext(ProductContext);
+  const [days, setDays] = useState(day)
+
+  useEffect(()=>{
+    cart.map((item)=>{
+      if(item.img === img){
+        item.day = days
+        
+      }
+    })
+  }, [days])
 
   return (
     <div>
@@ -35,7 +44,8 @@ const CartCard = ({name, img, price}) => {
                 <input
                   type="number"
                   min="1"
-                  value="1"
+                  onChange={(e) => setDays(e.target.value)}
+                  value={days}
                   id="Line3Qty"
                   className="h-8 w-12 rounded border-gray-200 bg-gray-50 p-0 text-center text-xs text-gray-600 [-moz-appearance:_textfield] focus:outline-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none"
                 />

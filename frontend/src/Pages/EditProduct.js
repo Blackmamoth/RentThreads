@@ -1,9 +1,17 @@
-import React, {useState} from 'react'
+import React, {useContext, useState} from 'react'
 import { Link, useParams } from 'react-router-dom';
-
+import { ProductContext } from '../App';
 const EditProduct = () => {
-    let {title} = useParams();
-    console.log(title)
+  const{sellerProduct} = useContext(ProductContext)
+  
+  let {title} = useParams();
+  
+  console.log(sellerProduct)
+  const product = sellerProduct.find((item) => item.title === title);
+  console.log(product)
+
+    
+
     const [newStock, setNewStock] = useState("");
     const [img, setImg] = useState("");
     const [newPrice, setNewPrice] = useState("");
@@ -27,7 +35,7 @@ const EditProduct = () => {
                   <li>
                     <div className="flex items-center">
                       <Link
-                        to="/tl/clothes/get-clothes"
+                        to="/tl/dashboard"
                         className="mr-2 text-sm font-medium text-gray-900"
                       >
                         Dashboard

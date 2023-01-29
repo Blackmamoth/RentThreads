@@ -8,10 +8,10 @@ const Navbar = () => {
 
   return (
     <div className="shadow-md w-full fixed top-0 left-0 z-10">
-      <div className="md:flex bg-white py-4 items-center justify-evenly ">
+      <div className="md:flex bg-gray-900 py-4 items-center justify-evenly ">
         <div className="font-bold text-2xl cursor-pointer flex items-center md:-mx-[10rem] mx-7">
           <Link to="/" className="mr-1 pt-2  ">
-            <span >
+            <span className="text-white" >
             StyleLease
             </span>
           </Link>
@@ -23,7 +23,7 @@ const Navbar = () => {
           <ion-icon name={open ? "close" : "menu"}></ion-icon>
         </div>
         <ul
-          className={`md:flex md:items-center lg:mr-7  sm:-mr-[9rem] md:pb-0 pb-12 absolute md:static bg-white left-0 w-full md:w-auto md:z-0  font-semibold md:pl-0 pl-9 transition-all duration-300 ease-in ${
+          className={`md:flex md:items-center lg:mr-7  sm:-mr-[9rem] md:pb-0 pb-12 absolute md:static bg-gray-900 left-0 w-full md:w-auto md:z-0  font-semibold md:pl-0 pl-9 transition-all duration-300 ease-in ${
             open ? "top-[4.5rem]" : "top-[-490px]"
           } `}
         >
@@ -36,7 +36,7 @@ const Navbar = () => {
             
                 <NavLink
                 to="/"
-                  className="text-gray-800 hover:text-indigo-600 duration-150"
+                  className="text-white hover:text-indigo-600 duration-150"
                   onClick={() => setOpen(!open)}
                   
                 >
@@ -50,7 +50,7 @@ const Navbar = () => {
             
                 <NavLink
                 to="/"
-                  className="text-gray-800 hover:text-red-600 duration-150"
+                  className="text-white hover:text-red-600 duration-150"
                   
                 >
                   {element}
@@ -65,7 +65,7 @@ const Navbar = () => {
             to={`/${element.toLowerCase()}`}
             onClick={() => setOpen(!open)}
               className={({ isActive }) =>{
-                return  isActive ?  ' text-indigo-600 duration-150'  : 'text-gray-800 hover:text-indigo-600 duration-150' 
+                return  isActive ?  ' text-white duration-150'  : 'text-white hover:text-indigo-600 duration-150' 
               }}
             
             >

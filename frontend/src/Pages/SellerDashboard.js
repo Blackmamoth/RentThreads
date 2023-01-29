@@ -6,7 +6,6 @@ import { ProductContext } from '../App'
 const SellerDashboard = () => {
 
     const {sellerProduct} = useContext(ProductContext);
-    const localProd = JSON.parse(localStorage.getItem('sellerProduct'));
     return (
         <div>
 
@@ -81,8 +80,8 @@ const SellerDashboard = () => {
                         <div className="lg:col-span-3">
                             <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                               { sellerProduct.map((product, index) => {
-                                        const {title, img, price} = product
-                                        return <SellerProductCard key={index} title={title} img={img} price={price} />
+                                        const {title, image, rentPerDay} = product
+                                        return <SellerProductCard key={index} title={title} img={image} price={rentPerDay} />
                                     }) 
                                     
                                     

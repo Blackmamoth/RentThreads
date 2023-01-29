@@ -1,12 +1,35 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
-const Signin = () => {
+const SellerSignin = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
+  const showSuccessToast = (message) => toast.success(message, {
+    position: "top-center",
+    autoClose: 1500,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+    })
+
+  const showErrorToast = (message) => toast.error(message, {
+    position: "top-center",
+    autoClose: 1500,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+    })
 
   const login = async (e) => {
     e.preventDefault();
@@ -14,13 +37,17 @@ const Signin = () => {
       alert("Please fill out all fields")
       return;
     }
-    await axios.post("http://localhost:5000/renter/auth/login", {email, password}).then(response => { 
+    await axios.post("http://localhost:5000/tl/auth/login", {email, password}).then(response => { 
         if(!response.data.error) {
+            showSuccessToast(response.data.data.message)
             localStorage.setItem("token", response.data.data.access_token)
-            localStorage.setItem("userDetails", JSON.stringify(response.data.data.userDetails));
-            navigate("/");
+            setTimeout(() => {
+                navigate("/tl/dashboard");
+            }, 3000);
         }   
-    }).then(data => {}).catch(err => alert(err.response.data.data.message))
+    }).then(data => {}).catch(err => {
+        showErrorToast(err.response.data.data.message)
+    })
   }
   
   return (
@@ -69,7 +96,7 @@ const Signin = () => {
             </button>
             <p className="mt-4 text-sm text-gray-500 sm:mt-0">
                     Don't have an account?{" "}
-                    <Link to="/user/signup" className="text-gray-700 underline">Sign up</Link>.
+                    <Link to="/seller/signup" className="text-gray-700 underline">Sign up</Link>.
                   </p>
           </form>
         </div>
@@ -78,4 +105,4 @@ const Signin = () => {
   );
 };
 
-export default Signin;
+export default SellerSignin;

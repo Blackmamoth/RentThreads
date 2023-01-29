@@ -34,7 +34,7 @@ const ProductCard = ({name, price, status, img}) => {
         <p className="text-sm text-white">
         <button
   className="inline-flex items-center rounded border  px-8 py-3 text-white focus:outline-none"
-  onClick={() => rentProduct({name, img, price, status})}
+  onClick={() => rentProduct({name, img, price, status, day:1})}
 >
   <span className="text-sm font-medium"> Add to cart </span>
 

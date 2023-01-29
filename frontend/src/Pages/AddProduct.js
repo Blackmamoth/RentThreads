@@ -1,28 +1,62 @@
 import React, {useState, useContext} from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { ProductContext } from '../App';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const AddProduct = () => {
   const navigate = useNavigate();
 
     const [title, setTitle] = useState("");
-    const [price, setPrice] = useState("");
-    const [img, setImg] = useState("");
+    const [rentPerDay, setRentPerDay] = useState("");
+    const [image, setImage] = useState("");
 
     const [stock, setStock] = useState("");
+    
+    const showSuccessToast = (message) => toast.success(message, {
+      position: "top-center",
+      autoClose: 1500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      })
+  
+    const showErrorToast = (message) => toast.error(message, {
+      position: "top-center",
+      autoClose: 1500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      })
 
     const {addProduct} = useContext(ProductContext);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        addProduct({title, price, img, stock});
+        await addItem();
         setTitle("");
-        setPrice("");
-        setImg("");
+        setRentPerDay("");
+        setImage("");
         setStock("");
-        navigate("/tl/clothes/get-clothes");
+      }
+      
+      const addItem = async () => {
+        await axios.post("http://localhost:5000/tl/clothes/add-cloth", {title, rentPerDay, image, stock}).then(response => { 
+          console.log(response)
+          if(!response.data.error) {
+            showSuccessToast(response.data.data.message);
+            addProduct({title, rentPerDay, image, stock});
+          navigate("/tl/dashboard")
+          }
+        }).then(err => showErrorToast(err.response.data.data.message))
     }
- 
+
   return (
     <div>
          <div className="px-10 py-10">
@@ -39,7 +73,7 @@ const AddProduct = () => {
                   <li>
                     <div className="flex items-center">
                       <Link
-                        to="/tl/clothes/get-clothes"
+                        to="/tl/dashboard"
                         className="mr-2 text-sm font-medium text-gray-900"
                       >
                         Dashboard
@@ -107,7 +141,7 @@ const AddProduct = () => {
 
                   <div>
                     <label
-                      htmlFor="price"
+                      htmlFor="rentPerDay"
                       className="block text-sm font-medium text-gray-700"
                     >
                       Price-Per-Day (in INR)
@@ -116,11 +150,11 @@ const AddProduct = () => {
                       <input
                       min="1"
                         type="number"
-                        onChange={(e) => setPrice(e.target.value)}
-                        value={price}
+                        onChange={(e) => setRentPerDay(e.target.value)}
+                        value={rentPerDay}
                         required
-                        id="price"
-                        name="price"
+                        id="rentPerDay"
+                        name="rentPerDay"
                         rows="3"
                         className="mt-1 block w-full rounded-md p-2 border-gray-300 shadow-sm focus:border-gray-900 focus:ring-gray-900 sm:text-sm"
                       ></input>
@@ -140,8 +174,8 @@ const AddProduct = () => {
                       <div className="mt-1 flex rounded-md shadow-sm">
                         <input
                         required
-                          onChange={(e) => setImg(e.target.value)}
-                          value={img}
+                          onChange={(e) => setImage(e.target.value)}
+                          value={image}
                           type="text"
                           name="image-link"
                           id="image-link"
@@ -176,30 +210,7 @@ const AddProduct = () => {
                       </div>
                     </div>
 
-                    {/* End Date */}
-                    {/* <div className="col-span-3 sm:col-span-2">
-                    <label
-                        htmlFor="end-date"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                       End Date
-                      </label>
-                      <div className="mt-1 flex rounded-md shadow-sm">
-                        <input
-                        value={endTime}
-                        onChange={e=>{
-                          setEndTime(e.target.value)
-                        }}
-                        required
-                          type="datetime-local"
-                          min="08-11-2022"
-                          name="end-date"
-                          id="end-date"
-                          className="block w-full flex-1 rounded-md p-2 border-gray-300 focus:border-gray-900 focus:ring-gray-900 sm:text-sm"
-                          placeholder="https://images.unsplash.com/photo-1517962847327-e8032e806fcc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDJ8fGNvdXBsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=600&q=60"
-                        />
-                      </div>
-                    </div> */}
+           
 
                   </div>
                 </div>
