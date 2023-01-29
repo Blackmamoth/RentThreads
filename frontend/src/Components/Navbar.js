@@ -4,16 +4,14 @@ import { Link, NavLink } from "react-router-dom";
 const Navbar = () => {
   const [open, setOpen] = useState(false);
 
-  const navName = ['Home', 'Cart', 'Checkout', 'About', 'Logout'];
+  const navName = ["Home", "Cart", "Checkout", "About", "Logout"];
 
   return (
     <div className="shadow-md w-full fixed top-0 left-0 z-10">
       <div className="md:flex bg-gray-900 py-4 items-center justify-evenly ">
         <div className="font-bold text-2xl cursor-pointer flex items-center md:-mx-[10rem] mx-7">
           <Link to="/" className="mr-1 pt-2  ">
-            <span className="text-white" >
-            StyleLease
-            </span>
+            <span className="text-white">StyleLease</span>
           </Link>
         </div>
         <div
@@ -27,54 +25,50 @@ const Navbar = () => {
             open ? "top-[4.5rem]" : "top-[-490px]"
           } `}
         >
+          {navName.map((element, index) => {
+            if (element == "Home") {
+              return (
+                <li className="md:ml-8 text-md md:my-0 my-7 " key={index}>
+                  <NavLink
+                    to="/"
+                    className="text-white hover:text-indigo-600 duration-150"
+                    onClick={() => setOpen(!open)}
+                  >
+                    {element}
+                  </NavLink>{" "}
+                </li>
+              );
+            }
 
-          {
-            navName.map((element, index)=>{
+            if (element === "Logout") {
+              return (
+                <li className="md:ml-8 text-md md:my-0 my-7 " key={index}>
+                  <NavLink
+                    to="/"
+                    className="text-white hover:text-red-600 duration-150"
+                  >
+                    {element}
+                  </NavLink>{" "}
+                </li>
+              );
+            }
 
-              if(element == 'Home'){
-                return <li className="md:ml-8 text-md md:my-0 my-7 " key={index}>
-            
+            return (
+              <li className="md:ml-8 text-md md:my-0 my-7 " key={index}>
                 <NavLink
-                to="/"
-                  className="text-white hover:text-indigo-600 duration-150"
+                  to={`/${element.toLowerCase()}`}
                   onClick={() => setOpen(!open)}
-                  
+                  className={({ isActive }) => {
+                    return isActive
+                      ? " text-white duration-150"
+                      : "text-white hover:text-indigo-600 duration-150";
+                  }}
                 >
                   {element}
                 </NavLink>{" "}
               </li>
-              }
-
-              if(element == 'Logout'){
-                return <li className="md:ml-8 text-md md:my-0 my-7 " key={index}>
-            
-                <NavLink
-                to="/"
-                  className="text-white hover:text-red-600 duration-150"
-                  
-                >
-                  {element}
-                </NavLink>{" "}
-              </li>
-
-              }
-
-            return  <li className="md:ml-8 text-md md:my-0 my-7 " key={index}>
-            
-            <NavLink
-            to={`/${element.toLowerCase()}`}
-            onClick={() => setOpen(!open)}
-              className={({ isActive }) =>{
-                return  isActive ?  ' text-white duration-150'  : 'text-white hover:text-indigo-600 duration-150' 
-              }}
-            
-            >
-              {element}
-            </NavLink>{" "}
-          </li>
-            })
-          }
-        
+            );
+          })}
         </ul>
       </div>
     </div>

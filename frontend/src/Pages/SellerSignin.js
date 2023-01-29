@@ -4,52 +4,36 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const SellerSignin = () => {
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const showSuccessToast = (message) => toast.success(message, {
-    position: "top-center",
-    autoClose: 1500,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "light",
-    })
+  const showSuccessToast = (message) => toast.success(message);
 
-  const showErrorToast = (message) => toast.error(message, {
-    position: "top-center",
-    autoClose: 1500,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "light",
-    })
+  const showErrorToast = (message) => toast.error(message);
 
   const login = async (e) => {
     e.preventDefault();
-    if(!email || !password) {
-      alert("Please fill out all fields")
+    if (!email || !password) {
+      alert("Please fill out all fields");
       return;
     }
-    await axios.post("http://localhost:5000/tl/auth/login", {email, password}).then(response => { 
-        if(!response.data.error) {
-            showSuccessToast(response.data.data.message)
-            localStorage.setItem("token", response.data.data.access_token)
-            setTimeout(() => {
-                navigate("/tl/dashboard");
-            }, 3000);
-        }   
-    }).then(data => {}).catch(err => {
-        showErrorToast(err.response.data.data.message)
-    })
-  }
-  
+    await axios
+      .post("http://localhost:5000/tl/auth/login", { email, password })
+      .then((response) => {
+        if (!response.data.error) {
+          showSuccessToast(response.data.data.message);
+          localStorage.setItem("token", response.data.data.access_token);
+          setTimeout(() => {
+            navigate("/tl/dashboard");
+          }, 3000);
+        }
+      })
+      .catch((err) => {
+        showErrorToast(err.response.data.data.message);
+      });
+  };
+
   return (
     <div>
       <div className="px-4 py-16 mx-auto max-w-screen-xl sm:px-6 lg:px-8">
@@ -58,9 +42,7 @@ const SellerSignin = () => {
             action="POST"
             className="p-8 mt-6 mb-0 rounded-lg shadow-2xl space-y-4"
           >
-            <p className="text-lg font-semibold text-center">
-              Login
-            </p>
+            <p className="text-lg font-semibold text-center">Login</p>
 
             <div>
               <div className="relative mt-1">
@@ -88,16 +70,19 @@ const SellerSignin = () => {
             </div>
 
             <button
-            onClick={login}
+              onClick={login}
               type="submit"
               className="block w-full px-5 py-3 text-sm font-semibold text-white bg-gray-900 hover:bg-gray-800 rounded-lg"
             >
               Login
             </button>
             <p className="mt-4 text-sm text-gray-500 sm:mt-0">
-                    Don't have an account?{" "}
-                    <Link to="/seller/signup" className="text-gray-700 underline">Sign up</Link>.
-                  </p>
+              Don't have an account?{" "}
+              <Link to="/seller/signup" className="text-gray-700 underline">
+                Sign up
+              </Link>
+              .
+            </p>
           </form>
         </div>
       </div>
