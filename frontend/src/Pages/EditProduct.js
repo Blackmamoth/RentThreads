@@ -5,7 +5,7 @@ import { ProductContext } from "../App";
 import { toast } from "react-toastify";
 
 const EditProduct = () => {
-  const { sellerProduct } = useContext(ProductContext);
+  const { sellerProduct, deleteSellerProduct } = useContext(ProductContext);
 
   let { title } = useParams();
 
@@ -56,6 +56,7 @@ const EditProduct = () => {
         })
         .then((res) => {
           showSuccessToast(res.data.data.message);
+          deleteSellerProduct(img);
           navigate("/tl/dashboard");
         })
         .catch((err) => {
