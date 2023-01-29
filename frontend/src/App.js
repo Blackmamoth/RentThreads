@@ -64,6 +64,10 @@ function App() {
   const [cart, setCart] = useState([]);
   const [sellerProduct, setSellerProduct] = useState([]);
 
+  function deleteSellerProduct(img) {
+    setSellerProduct(sellerProduct.filter((item) => item.img !== img));
+  }
+
   function rentProduct(product) {
     setData(data.filter((item) => item.img != product.img));
     setCart([...cart, product]);
@@ -111,6 +115,7 @@ function App() {
         removeProduct,
         data,
         search,
+        deleteSellerProduct
       }}
     >
       <BrowserRouter>
